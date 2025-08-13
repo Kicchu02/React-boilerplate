@@ -1,9 +1,9 @@
 import { Button, Link, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
-import { useNavigateHelper } from "../hooks/useNavigateHelper";
+import { useAppNavigation } from "../RoutesHelper";
 
 export const SignInPage = (): React.ReactElement => {
-  const navigateHelper = useNavigateHelper();
+  const navigateHelper = useAppNavigation();
 
   return (
     <Stack height="100%" alignItems="center" justifyContent="center">
