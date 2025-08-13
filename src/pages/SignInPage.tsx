@@ -1,8 +1,9 @@
 import { Button, Link, Stack, TextField, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { useAppNavigation } from "../RoutesHelper";
 
-export const SignInPage = (): React.ReactElement => {
+export const SignInPage = observer((): React.ReactElement => {
   const navigateHelper = useAppNavigation();
 
   return (
@@ -26,4 +27,4 @@ export const SignInPage = (): React.ReactElement => {
       </Stack>
     </Stack>
   );
-};
+});

@@ -1,9 +1,10 @@
 import { Stack } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import type React from "react";
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-export const App = (): React.ReactElement => {
+export const App = observer((): React.ReactElement => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,4 +19,4 @@ export const App = (): React.ReactElement => {
       <Outlet />
     </Stack>
   );
-};
+});
