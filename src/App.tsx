@@ -1,10 +1,11 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import type React from "react";
+import { Outlet } from "react-router-dom";
 
 export const App = (): React.ReactElement => {
   return (
-    <Stack>
-      <Typography variant="h1">Hello World</Typography>
+    <Stack height="100%">
+      <Outlet />
     </Stack>
   );
 };
