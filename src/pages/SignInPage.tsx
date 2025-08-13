@@ -1,12 +1,23 @@
-import { Button, Link, Stack, TextField, Typography } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useState } from "react";
 import { useAppNavigation } from "../RoutesHelper";
 import { useSignInPageStore } from "../stores/hooks";
 
 export const SignInPage = observer((): React.ReactElement => {
   const navigateHelper = useAppNavigation();
   const signInPageStore = useSignInPageStore();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Stack height="100%" alignItems="center" justifyContent="center">
@@ -22,11 +33,22 @@ export const SignInPage = observer((): React.ReactElement => {
         />
         <TextField
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           fullWidth
           required
           value={signInPageStore.password}
           onChange={(e) => signInPageStore.setPassword(e.target.value)}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
         />
         <Button
           variant="contained"
