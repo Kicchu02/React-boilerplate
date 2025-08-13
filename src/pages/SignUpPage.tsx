@@ -1,9 +1,10 @@
 import { Button, Link, Stack, TextField, Typography } from "@mui/material";
 import type React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigateHelper } from "../hooks/useNavigateHelper";
 
 export const SignUpPage = (): React.ReactElement => {
-  const navigate = useNavigate();
+  const navigateHelper = useNavigateHelper();
+
   return (
     <Stack height="100%" alignItems="center" justifyContent="center">
       <Stack gap={4} width="400px" alignItems="center">
@@ -16,7 +17,7 @@ export const SignUpPage = (): React.ReactElement => {
         <Typography variant="body2">
           Already have an account?{" "}
           <Link
-            onClick={() => navigate("/signIn")}
+            onClick={navigateHelper.navigateToSignIn}
             style={{ cursor: "pointer" }}
           >
             Sign In
