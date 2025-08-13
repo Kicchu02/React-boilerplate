@@ -1,25 +1,26 @@
 import { Button, Link, Stack, TextField, Typography } from "@mui/material";
-import type React from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export const SignUpPage = (): React.ReactElement => {
+export const SignInPage = (): React.ReactElement => {
   const navigate = useNavigate();
+
   return (
     <Stack height="100%" alignItems="center" justifyContent="center">
       <Stack gap={4} width="400px" alignItems="center">
-        <Typography variant="h4">Sign Up</Typography>
+        <Typography variant="h4">Sign In</Typography>
         <TextField label="Email" fullWidth required />
         <TextField label="Password" fullWidth required />
         <Button variant="contained" fullWidth size="large">
-          Sign Up
+          Sign In
         </Button>
         <Typography variant="body2">
-          Already have an account?{" "}
+          Don't have an account?{" "}
           <Link
-            onClick={() => navigate("/signIn")}
+            onClick={() => navigate("/signUp")}
             style={{ cursor: "pointer" }}
           >
-            Sign In
+            Sign Up
           </Link>
         </Typography>
       </Stack>
