@@ -6,11 +6,12 @@ import {
   types,
   type Instance,
 } from "mobx-state-tree";
+import { EMPTY_STRING } from "../constants";
 
 export const SignInPageStore = types
   .model("SignInPageStore", {
-    email: types.optional(types.string, ""),
-    password: types.optional(types.string, ""),
+    email: types.optional(types.string, EMPTY_STRING),
+    password: types.optional(types.string, EMPTY_STRING),
     isLoading: types.optional(types.boolean, false),
     isEmailInvalid: types.optional(types.boolean, false),
     isPasswordInvalid: types.optional(types.boolean, false),
@@ -64,7 +65,10 @@ export const SignInPageStore = types
   }))
   .views((store) => ({
     get isButtonDisabled(): boolean {
-      return store.email.trim() === "" || store.password.trim() === "";
+      return (
+        store.email.trim() === EMPTY_STRING ||
+        store.password.trim() === EMPTY_STRING
+      );
     },
     get isAPIErrored(): boolean {
       return store.isEmailInvalid || store.isPasswordInvalid;

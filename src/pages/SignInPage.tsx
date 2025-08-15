@@ -79,7 +79,10 @@ export const SignInPage = observer((): React.ReactElement => {
         <Typography variant="body2">
           Don't have an account?{" "}
           <Link
-            onClick={navigateHelper.navigateToSignUp}
+            onClick={() => {
+              signInPageStore.reset();
+              navigateHelper.navigateToSignUp();
+            }}
             style={{ cursor: "pointer" }}
           >
             Sign Up

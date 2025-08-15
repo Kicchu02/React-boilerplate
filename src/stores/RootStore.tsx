@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import React from "react";
+import { EMPTY_STRING } from "../constants";
 import { RootStoreContext } from "./RootStoreContext";
 import { createSignInPageStore, SignInPageStore } from "./SignInPageStore";
 import { createSignUpPageStore, SignUpPageStore } from "./SignUpPageStore";
@@ -13,7 +14,7 @@ export const RootStore = types
     signInPageStore: SignInPageStore,
     showFeatureInDevPopup: types.optional(types.boolean, false),
     isPopupOpen: types.optional(types.boolean, false),
-    popupMessage: types.optional(types.string, ""),
+    popupMessage: types.optional(types.string, EMPTY_STRING),
     popupVariant: types.optional(
       types.union(
         types.literal("success"),
