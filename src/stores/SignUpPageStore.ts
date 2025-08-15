@@ -1,5 +1,11 @@
 import axios, { AxiosError } from "axios";
-import { flow, types, type Instance } from "mobx-state-tree";
+import {
+  applySnapshot,
+  flow,
+  getSnapshot,
+  types,
+  type Instance,
+} from "mobx-state-tree";
 
 export const SignUpPageStore = types
   .model("SignUpPageStore", {
@@ -10,7 +16,16 @@ export const SignUpPageStore = types
     isEmailInvalid: types.optional(types.boolean, false),
     isPasswordInvalid: types.optional(types.boolean, false),
   })
+  .volatile(() => ({
+    initialState: {} as ReturnType<typeof getSnapshot>,
+  }))
   .actions((store) => ({
+    afterCreate: (): void => {
+      store.initialState = getSnapshot(store);
+    },
+    reset: (): void => {
+      applySnapshot(store, store.initialState);
+    },
     setEmail: (email: string): void => {
       store.email = email;
     },
@@ -52,6 +67,13 @@ export const SignUpPageStore = types
   .views((store) => ({
     get isButtonDisabled(): boolean {
       return store.email.trim() === "" || store.password.trim() === "";
+    },
+    get isAPIErrored(): boolean {
+      return (
+        store.isEmailAlreadyExists ||
+        store.isEmailInvalid ||
+        store.isPasswordInvalid
+      );
     },
   }));
 

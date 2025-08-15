@@ -1,13 +1,30 @@
 import axios, { AxiosError } from "axios";
-import { flow, types, type Instance } from "mobx-state-tree";
+import {
+  applySnapshot,
+  flow,
+  getSnapshot,
+  types,
+  type Instance,
+} from "mobx-state-tree";
 
 export const SignInPageStore = types
   .model("SignInPageStore", {
     email: types.optional(types.string, ""),
     password: types.optional(types.string, ""),
     isLoading: types.optional(types.boolean, false),
+    isEmailInvalid: types.optional(types.boolean, false),
+    isPasswordInvalid: types.optional(types.boolean, false),
   })
+  .volatile(() => ({
+    initialState: {} as ReturnType<typeof getSnapshot>,
+  }))
   .actions((store) => ({
+    afterCreate: (): void => {
+      store.initialState = getSnapshot(store);
+    },
+    reset: (): void => {
+      applySnapshot(store, store.initialState);
+    },
     setEmail: (email: string): void => {
       store.email = email;
     },
@@ -16,6 +33,8 @@ export const SignInPageStore = types
     },
     signIn: flow(function* () {
       store.isLoading = true;
+      store.isEmailInvalid = false;
+      store.isPasswordInvalid = false;
       try {
         yield axios.post("http://localhost:8080/user/signIn", {
           emailId: { emailId: store.email },
@@ -26,8 +45,15 @@ export const SignInPageStore = types
         if (error.response) {
           const { status, data } = error.response;
           switch (status) {
-            case 409:
-              console.log(data);
+            case 400:
+              store.isEmailInvalid = true;
+              break;
+            case 401:
+              if (data === "Email doesn't exist.") {
+                store.isEmailInvalid = true;
+              } else if (data === "Invalid password.") {
+                store.isPasswordInvalid = true;
+              }
               break;
           }
         }
@@ -39,6 +65,9 @@ export const SignInPageStore = types
   .views((store) => ({
     get isButtonDisabled(): boolean {
       return store.email.trim() === "" || store.password.trim() === "";
+    },
+    get isAPIErrored(): boolean {
+      return store.isEmailInvalid || store.isPasswordInvalid;
     },
   }));
 

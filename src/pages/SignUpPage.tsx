@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
+import { showPopup } from "../helpers";
 import { useAppNavigation } from "../RoutesHelper";
 import { useSignUpPageStore } from "../stores/hooks";
 
@@ -74,7 +75,15 @@ export const SignUpPage = observer((): React.ReactElement => {
           fullWidth
           size="large"
           disabled={signUpPageStore.isButtonDisabled}
-          onClick={signUpPageStore.signUp}
+          onClick={async () => {
+            await signUpPageStore.signUp();
+            if (signUpPageStore.isAPIErrored) {
+              return;
+            }
+            showPopup(signUpPageStore, "Sign up successful", "success");
+            signUpPageStore.reset();
+            navigateHelper.navigateToSignIn();
+          }}
           loading={signUpPageStore.isLoading}
         >
           Sign Up
@@ -82,7 +91,10 @@ export const SignUpPage = observer((): React.ReactElement => {
         <Typography variant="body2">
           Already have an account?{" "}
           <Link
-            onClick={navigateHelper.navigateToSignIn}
+            onClick={() => {
+              signUpPageStore.reset();
+              navigateHelper.navigateToSignIn();
+            }}
             style={{ cursor: "pointer" }}
           >
             Sign In

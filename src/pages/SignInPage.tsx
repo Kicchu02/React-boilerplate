@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
+import { showPopup } from "../helpers";
 import { useAppNavigation } from "../RoutesHelper";
 import { useSignInPageStore } from "../stores/hooks";
 
@@ -30,6 +31,10 @@ export const SignInPage = observer((): React.ReactElement => {
           required
           value={signInPageStore.email}
           onChange={(e) => signInPageStore.setEmail(e.target.value)}
+          error={signInPageStore.isEmailInvalid}
+          helperText={
+            signInPageStore.isEmailInvalid ? "Invalid email" : undefined
+          }
         />
         <TextField
           label="Password"
@@ -38,6 +43,10 @@ export const SignInPage = observer((): React.ReactElement => {
           required
           value={signInPageStore.password}
           onChange={(e) => signInPageStore.setPassword(e.target.value)}
+          error={signInPageStore.isPasswordInvalid}
+          helperText={
+            signInPageStore.isPasswordInvalid ? "Invalid password" : undefined
+          }
           slotProps={{
             input: {
               endAdornment: (
@@ -55,7 +64,14 @@ export const SignInPage = observer((): React.ReactElement => {
           fullWidth
           size="large"
           disabled={signInPageStore.isButtonDisabled}
-          onClick={signInPageStore.signIn}
+          onClick={async () => {
+            await signInPageStore.signIn();
+            if (signInPageStore.isAPIErrored) {
+              return;
+            }
+            showPopup(signInPageStore, "Sign in successful", "success");
+            signInPageStore.reset();
+          }}
           loading={signInPageStore.isLoading}
         >
           Sign In
