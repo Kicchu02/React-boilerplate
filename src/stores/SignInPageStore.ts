@@ -2,11 +2,13 @@ import axios, { AxiosError } from "axios";
 import {
   applySnapshot,
   flow,
+  getRoot,
   getSnapshot,
   types,
   type Instance,
 } from "mobx-state-tree";
 import { EMPTY_STRING } from "../constants";
+import type { RootStore } from "./RootStore";
 
 export const SignInPageStore = types
   .model("SignInPageStore", {
@@ -41,6 +43,7 @@ export const SignInPageStore = types
           emailId: { emailId: store.email },
           password: store.password,
         });
+        (getRoot(store) as Instance<typeof RootStore>).setIsUserLoggedIn(true);
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

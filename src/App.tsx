@@ -2,19 +2,21 @@ import { Alert, Snackbar, Stack } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import type React from "react";
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { useNavigateHelper } from "./RoutesHelper";
 import { useRootStore } from "./stores/hooks";
 
 export const App = observer((): React.ReactElement => {
-  const navigate = useNavigate();
+  const navigateHelper = useNavigateHelper();
   const rootStore = useRootStore();
 
   useEffect(() => {
-    const token = localStorage.getItem("webToken");
-    if (!token) {
-      navigate("/signIn");
+    if (!rootStore.isUserLoggedIn) {
+      navigateHelper.navigateToSignIn();
+    } else {
+      navigateHelper.navigateToHome();
     }
-  }, [navigate]);
+  }, [navigateHelper, rootStore.isUserLoggedIn]);
 
   return (
     <Stack height="100%">

@@ -12,11 +12,11 @@ import {
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { showPopup } from "../helpers";
-import { useAppNavigation } from "../RoutesHelper";
+import { useNavigateHelper } from "../RoutesHelper";
 import { useSignInPageStore } from "../stores/hooks";
 
 export const SignInPage = observer((): React.ReactElement => {
-  const navigateHelper = useAppNavigation();
+  const navigateHelper = useNavigateHelper();
   const signInPageStore = useSignInPageStore();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -71,6 +71,7 @@ export const SignInPage = observer((): React.ReactElement => {
             }
             showPopup(signInPageStore, "Sign in successful", "success");
             signInPageStore.reset();
+            navigateHelper.navigateToHome();
           }}
           loading={signInPageStore.isLoading}
         >

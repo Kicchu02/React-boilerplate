@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { App } from "./App";
+import { HomePage } from "./pages/HomePage";
 import { SignInPage } from "./pages/SignInPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { Routes } from "./RoutesHelper";
@@ -11,6 +12,7 @@ export const router = createBrowserRouter([
     children: [
       { path: Routes.SignUp, element: <SignUpPage /> },
       { path: Routes.SignIn, element: <SignInPage /> },
+      { path: Routes.Home, element: <HomePage /> },
     ],
   },
 ]);

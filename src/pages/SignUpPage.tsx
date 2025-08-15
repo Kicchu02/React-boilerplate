@@ -13,11 +13,11 @@ import {
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
 import { showPopup } from "../helpers";
-import { useAppNavigation } from "../RoutesHelper";
+import { useNavigateHelper } from "../RoutesHelper";
 import { useSignUpPageStore } from "../stores/hooks";
 
 export const SignUpPage = observer((): React.ReactElement => {
-  const navigateHelper = useAppNavigation();
+  const navigateHelper = useNavigateHelper();
   const signUpPageStore = useSignUpPageStore();
   const [showPassword, setShowPassword] = useState(false);
 
