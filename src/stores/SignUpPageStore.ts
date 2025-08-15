@@ -6,6 +6,9 @@ export const SignUpPageStore = types
     email: types.optional(types.string, ""),
     password: types.optional(types.string, ""),
     isLoading: types.optional(types.boolean, false),
+    isEmailAlreadyExists: types.optional(types.boolean, false),
+    isEmailInvalid: types.optional(types.boolean, false),
+    isPasswordInvalid: types.optional(types.boolean, false),
   })
   .actions((store) => ({
     setEmail: (email: string): void => {
@@ -16,6 +19,9 @@ export const SignUpPageStore = types
     },
     signUp: flow(function* () {
       store.isLoading = true;
+      store.isEmailAlreadyExists = false;
+      store.isEmailInvalid = false;
+      store.isPasswordInvalid = false;
       try {
         yield axios.post("http://localhost:8080/user/signUp", {
           emailId: { emailId: store.email },
@@ -27,7 +33,14 @@ export const SignUpPageStore = types
           const { status, data } = error.response;
           switch (status) {
             case 409:
-              console.log(data);
+              store.isEmailAlreadyExists = true;
+              break;
+            case 400:
+              if (data === "Password is insecure.") {
+                store.isPasswordInvalid = true;
+              } else {
+                store.isEmailInvalid = true;
+              }
               break;
           }
         }

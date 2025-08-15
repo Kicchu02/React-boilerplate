@@ -1,6 +1,7 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
+  Alert,
   Button,
   IconButton,
   InputAdornment,
@@ -23,6 +24,11 @@ export const SignUpPage = observer((): React.ReactElement => {
     <Stack height="100%" alignItems="center" justifyContent="center">
       <Stack gap={4} width="400px" alignItems="center">
         <Typography variant="h4">Sign Up</Typography>
+        {signUpPageStore.isEmailAlreadyExists && (
+          <Stack width="100%">
+            <Alert severity="error">This email is already in use</Alert>
+          </Stack>
+        )}
         <TextField
           label="Email"
           type="email"
@@ -30,6 +36,13 @@ export const SignUpPage = observer((): React.ReactElement => {
           required
           value={signUpPageStore.email}
           onChange={(e) => signUpPageStore.setEmail(e.target.value)}
+          error={
+            signUpPageStore.isEmailInvalid ||
+            signUpPageStore.isEmailAlreadyExists
+          }
+          helperText={
+            signUpPageStore.isEmailInvalid ? "Invalid email" : undefined
+          }
         />
         <TextField
           label="Password"
@@ -38,6 +51,12 @@ export const SignUpPage = observer((): React.ReactElement => {
           required
           value={signUpPageStore.password}
           onChange={(e) => signUpPageStore.setPassword(e.target.value)}
+          error={signUpPageStore.isPasswordInvalid}
+          helperText={
+            signUpPageStore.isPasswordInvalid
+              ? "Password is insecure"
+              : undefined
+          }
           slotProps={{
             input: {
               endAdornment: (
