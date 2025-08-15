@@ -39,10 +39,14 @@ export const SignInPageStore = types
       store.isEmailInvalid = false;
       store.isPasswordInvalid = false;
       try {
-        yield axios.post("http://localhost:8080/user/signIn", {
-          emailId: { emailId: store.email },
-          password: store.password,
-        });
+        yield axios.post(
+          "http://localhost:8080/user/signIn",
+          {
+            emailId: { emailId: store.email },
+            password: store.password,
+          },
+          { withCredentials: true }
+        );
         (getRoot(store) as Instance<typeof RootStore>).setIsUserLoggedIn(true);
       } catch (e) {
         const error = e as AxiosError;

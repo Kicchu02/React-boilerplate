@@ -39,10 +39,14 @@ export const SignUpPageStore = types
       store.isEmailInvalid = false;
       store.isPasswordInvalid = false;
       try {
-        yield axios.post("http://localhost:8080/user/signUp", {
-          emailId: { emailId: store.email },
-          password: store.password,
-        });
+        yield axios.post(
+          "http://localhost:8080/user/signUp",
+          {
+            emailId: { emailId: store.email },
+            password: store.password,
+          },
+          { withCredentials: true }
+        );
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

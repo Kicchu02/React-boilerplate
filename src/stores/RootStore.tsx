@@ -1,6 +1,7 @@
 import { types } from "mobx-state-tree";
 import React from "react";
 import { EMPTY_STRING } from "../constants";
+import { createHomePageStore, HomePageStore } from "./HomePageStore";
 import { RootStoreContext } from "./RootStoreContext";
 import { createSignInPageStore, SignInPageStore } from "./SignInPageStore";
 import { createSignUpPageStore, SignUpPageStore } from "./SignUpPageStore";
@@ -12,6 +13,7 @@ export const RootStore = types
     isUserLoggedIn: types.optional(types.boolean, false),
     signUpPageStore: SignUpPageStore,
     signInPageStore: SignInPageStore,
+    homePageStore: HomePageStore,
     showFeatureInDevPopup: types.optional(types.boolean, false),
     isPopupOpen: types.optional(types.boolean, false),
     popupMessage: types.optional(types.string, EMPTY_STRING),
@@ -51,6 +53,7 @@ export const RootStoreProvider = ({
   const store = RootStore.create({
     signUpPageStore: createSignUpPageStore(),
     signInPageStore: createSignInPageStore(),
+    homePageStore: createHomePageStore(),
   });
   return (
     <RootStoreContext.Provider value={store}>

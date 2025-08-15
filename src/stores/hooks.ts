@@ -1,5 +1,6 @@
 import type { Instance } from "mobx-state-tree";
 import { useContext } from "react";
+import { HomePageStore } from "./HomePageStore";
 import type { RootStore } from "./RootStore";
 import { RootStoreContext } from "./RootStoreContext";
 import { SignInPageStore } from "./SignInPageStore";
@@ -21,4 +22,9 @@ export const useSignUpPageStore = (): Instance<typeof SignUpPageStore> => {
 export const useSignInPageStore = (): Instance<typeof SignInPageStore> => {
   const store = useRootStore();
   return store.signInPageStore;
+};
+
+export const useHomePageStore = (): Instance<typeof HomePageStore> => {
+  const store = useRootStore();
+  return store.homePageStore;
 };
