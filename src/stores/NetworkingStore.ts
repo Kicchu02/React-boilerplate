@@ -9,6 +9,7 @@ import {
 export const Endpoints = {
   SIGN_UP: "/user/signUp",
   SIGN_IN: "/user/signIn",
+  SIGN_OUT: "/user/signOut",
   DUMMY: "/dummy/dummy",
 } as const;
 

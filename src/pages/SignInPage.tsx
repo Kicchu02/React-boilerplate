@@ -81,6 +81,9 @@ export const SignInPage = observer((): React.ReactElement => {
           Don't have an account?{" "}
           <Link
             onClick={() => {
+              if (signInPageStore.isLoading) {
+                return;
+              }
               signInPageStore.reset();
               navigateHelper.navigateToSignUp();
             }}

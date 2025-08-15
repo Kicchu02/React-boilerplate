@@ -92,6 +92,9 @@ export const SignUpPage = observer((): React.ReactElement => {
           Already have an account?{" "}
           <Link
             onClick={() => {
+              if (signUpPageStore.isLoading) {
+                return;
+              }
               signUpPageStore.reset();
               navigateHelper.navigateToSignIn();
             }}

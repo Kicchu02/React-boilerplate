@@ -1,7 +1,6 @@
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { WEB_TOKEN_COOKIE_NAME } from "../constants";
 import { useNavigateHelper } from "../RoutesHelper";
 import { useHomePageStore } from "../stores/hooks";
 
@@ -24,9 +23,9 @@ export const HomePage = observer((): React.ReactElement => {
           <Button
             variant="outlined"
             size="large"
-            onClick={() => {
-              localStorage.removeItem(WEB_TOKEN_COOKIE_NAME);
-              console.log(localStorage.getItem(WEB_TOKEN_COOKIE_NAME));
+            loading={homePageStore.isSignOutLoading}
+            onClick={async () => {
+              await homePageStore.signOut();
               homePageStore.reset();
               navigateHelper.navigateToSignIn();
             }}

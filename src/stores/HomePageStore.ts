@@ -5,7 +5,7 @@ import {
   types,
   type Instance,
 } from "mobx-state-tree";
-import { EMPTY_STRING } from "../constants";
+import { EMPTY_STRING, WEB_TOKEN_COOKIE_NAME } from "../constants";
 import { postAPI } from "../helpers";
 import { Endpoints } from "./NetworkingStore";
 
@@ -13,6 +13,7 @@ export const HomePageStore = types
   .model("HomePageStore", {
     isLoading: types.optional(types.boolean, false),
     dummyData: types.optional(types.string, EMPTY_STRING),
+    isSignOutLoading: types.optional(types.boolean, false),
   })
   .volatile(() => ({
     initialState: {} as ReturnType<typeof getSnapshot>,
@@ -33,6 +34,17 @@ export const HomePageStore = types
         console.error(e);
       } finally {
         store.isLoading = false;
+      }
+    }),
+    signOut: flow(function* () {
+      store.isSignOutLoading = true;
+      try {
+        yield postAPI(Endpoints.SIGN_OUT);
+        localStorage.removeItem(WEB_TOKEN_COOKIE_NAME);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        store.isSignOutLoading = false;
       }
     }),
   }));
