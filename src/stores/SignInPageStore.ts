@@ -1,14 +1,14 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import {
   applySnapshot,
   flow,
-  getRoot,
   getSnapshot,
   types,
   type Instance,
 } from "mobx-state-tree";
-import { EMPTY_STRING } from "../constants";
-import type { RootStore } from "./RootStore";
+import { EMPTY_STRING, WEB_TOKEN_COOKIE_NAME } from "../constants";
+import { postAPI } from "../helpers";
+import { Endpoints } from "./NetworkingStore";
 
 export const SignInPageStore = types
   .model("SignInPageStore", {
@@ -39,15 +39,12 @@ export const SignInPageStore = types
       store.isEmailInvalid = false;
       store.isPasswordInvalid = false;
       try {
-        yield axios.post(
-          "http://localhost:8080/user/signIn",
-          {
-            emailId: { emailId: store.email },
-            password: store.password,
-          },
-          { withCredentials: true }
-        );
-        (getRoot(store) as Instance<typeof RootStore>).setIsUserLoggedIn(true);
+        const response = yield postAPI(Endpoints.SIGN_IN, {
+          emailId: { emailId: store.email },
+          password: store.password,
+        });
+        console.log("response", response);
+        localStorage.setItem(WEB_TOKEN_COOKIE_NAME, response.data.webToken);
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

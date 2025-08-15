@@ -1,23 +1,33 @@
-import axios from "axios";
-import { flow, types, type Instance } from "mobx-state-tree";
+import {
+  applySnapshot,
+  flow,
+  getSnapshot,
+  types,
+  type Instance,
+} from "mobx-state-tree";
 import { EMPTY_STRING } from "../constants";
+import { postAPI } from "../helpers";
+import { Endpoints } from "./NetworkingStore";
 
 export const HomePageStore = types
   .model("HomePageStore", {
     isLoading: types.optional(types.boolean, false),
     dummyData: types.optional(types.string, EMPTY_STRING),
   })
+  .volatile(() => ({
+    initialState: {} as ReturnType<typeof getSnapshot>,
+  }))
   .actions((store) => ({
+    afterCreate: (): void => {
+      store.initialState = getSnapshot(store);
+    },
+    reset: (): void => {
+      applySnapshot(store, store.initialState);
+    },
     dummyAPI: flow(function* () {
       store.isLoading = true;
       try {
-        const response = yield axios.post(
-          "http://localhost:8080/dummy/dummy",
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+        const response = yield postAPI(Endpoints.DUMMY);
         store.dummyData = response.data.message;
       } catch (e) {
         console.error(e);

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import {
   applySnapshot,
   flow,
@@ -7,6 +7,8 @@ import {
   type Instance,
 } from "mobx-state-tree";
 import { EMPTY_STRING } from "../constants";
+import { postAPI } from "../helpers";
+import { Endpoints } from "./NetworkingStore";
 
 export const SignUpPageStore = types
   .model("SignUpPageStore", {
@@ -39,14 +41,10 @@ export const SignUpPageStore = types
       store.isEmailInvalid = false;
       store.isPasswordInvalid = false;
       try {
-        yield axios.post(
-          "http://localhost:8080/user/signUp",
-          {
-            emailId: { emailId: store.email },
-            password: store.password,
-          },
-          { withCredentials: true }
-        );
+        yield postAPI(Endpoints.SIGN_UP, {
+          emailId: { emailId: store.email },
+          password: store.password,
+        });
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

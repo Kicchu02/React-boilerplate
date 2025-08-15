@@ -2,6 +2,7 @@ import { types } from "mobx-state-tree";
 import React from "react";
 import { EMPTY_STRING } from "../constants";
 import { createHomePageStore, HomePageStore } from "./HomePageStore";
+import { createNetworkingStore, NetworkingStore } from "./NetworkingStore";
 import { RootStoreContext } from "./RootStoreContext";
 import { createSignInPageStore, SignInPageStore } from "./SignInPageStore";
 import { createSignUpPageStore, SignUpPageStore } from "./SignUpPageStore";
@@ -10,10 +11,10 @@ export type PopupVariant = "success" | "error" | "warning" | "info";
 
 export const RootStore = types
   .model("RootStore", {
-    isUserLoggedIn: types.optional(types.boolean, false),
     signUpPageStore: SignUpPageStore,
     signInPageStore: SignInPageStore,
     homePageStore: HomePageStore,
+    networkingStore: NetworkingStore,
     showFeatureInDevPopup: types.optional(types.boolean, false),
     isPopupOpen: types.optional(types.boolean, false),
     popupMessage: types.optional(types.string, EMPTY_STRING),
@@ -28,9 +29,6 @@ export const RootStore = types
     ),
   })
   .actions((store) => ({
-    setIsUserLoggedIn: (isUserLoggedIn: boolean): void => {
-      store.isUserLoggedIn = isUserLoggedIn;
-    },
     setShowFeatureInDevPopup: (showFeatureInDevPopup: boolean): void => {
       store.showFeatureInDevPopup = showFeatureInDevPopup;
     },
@@ -54,6 +52,7 @@ export const RootStoreProvider = ({
     signUpPageStore: createSignUpPageStore(),
     signInPageStore: createSignInPageStore(),
     homePageStore: createHomePageStore(),
+    networkingStore: createNetworkingStore(),
   });
   return (
     <RootStoreContext.Provider value={store}>
